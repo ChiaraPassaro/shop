@@ -61,7 +61,7 @@
 
 	const handleClickOutside = (event: MouseEvent) => {
 		const target = event.target as HTMLElement
-		if (!target.closest(".combo-input")) {
+		if (!target.closest(`#selector-${props.id}`)) {
 			isOpen.value = false
 		}
 	}
@@ -87,7 +87,7 @@
 </script>
 
 <template>
-	<div class="selector" :class="{ 'selector--open': isOpen, 'selector--selected': model.label }">
+	<div :id="`selector-${id}`" class="selector" :class="{ 'selector--open': isOpen, 'selector--selected': model.label }">
 		<label :id="`combo-label-${id}`" :class="{ 'sr-only': !showLabel }">{{ label }}</label>
 
 		<div

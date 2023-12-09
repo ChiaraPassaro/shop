@@ -23,3 +23,5 @@ export type Product = {
 	category: Category
 	images: string[]
 }
+
+export type Filter = "priceMin" | "priceMax"

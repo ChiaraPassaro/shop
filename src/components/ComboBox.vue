@@ -73,7 +73,7 @@
 	watch(
 		() => props.modelValue,
 		() => {
-			selected.value = props.options.findIndex(({ value }) => value === model.value.value)
+			selected.value = options.value.findIndex(({ value }) => value === model.value.value)
 		},
 	)
 
@@ -87,13 +87,16 @@
 </script>
 
 <template>
-	<div :id="`selector-${id}`" class="selector" :class="{ 'selector--open': isOpen, 'selector--selected': model.label }">
+	<div :id="`selector-${id}`" class="selector" :class="{ 'selector--open': isOpen }">
 		<label :id="`combo-label-${id}`" :class="{ 'sr-only': !showLabel }">{{ label }}</label>
 
 		<div
 			id="combo1"
 			class="combo-input"
-			:class="{ 'combo-input--open': isOpen }"
+			:class="{
+				'combo-input--open': isOpen,
+				'combo-input--selected': model.label,
+			}"
 			:aria-labelledby="`combo-label-${id}`"
 			:aria-controls="`listbox-${id}`"
 			aria-expanded="false"
@@ -104,16 +107,25 @@
 			@keydown.arrow-up="selected > 0 && selected--"
 			@keydown.space="!isOpen && handleOpen()"
 			@keydown.escape="isOpen && handleOpen()"
-			@keydown.enter="handleSelect(options[selected])"
+			@keydown.enter="isOpen && handleSelect(options[selected])"
+			@keydown.tab="isOpen && handleOpen()"
 			@click="handleOpen"
 		>
 			<span>{{ model?.label || resetValue.label }}</span>
-			<ArrowDown class="combo-input__icon" :class="{ 'combo-input__icon--rotate': isOpen }" />
+			<ArrowDown
+				class="combo-input__icon"
+				:class="{ 'combo-input__icon--rotate': isOpen }"
+				:color="isOpen ? '#e42313' : undefined"
+			/>
 		</div>
 		<ul
 			:id="`listbox-${id}`"
 			class="combo-menu"
-			:class="{ 'combo-menu--open': isOpen, 'combo-menu--closed': !isOpen }"
+			:class="{
+				'combo-menu--open': isOpen,
+				'combo-menu--closed': !isOpen,
+				'combo-menu--selected': model.label,
+			}"
 			:aria-labelledby="`combo-label-${id}`"
 			role="listbox"
 			tabindex="-1"
@@ -143,29 +155,28 @@
 		flex-direction: column;
 		align-items: flex-start;
 		min-width: 11.5rem;
-		border-radius: 0.3125rem;
 		transition: all 0.1s;
-		border: 2px solid var(--veryLightGrey);
-		&:focus-within {
-			border-width: 3px;
-		}
-		&--open {
-			animation: slide-down 0.2s;
-		}
-		&--selected {
-			border-color: var(--primary);
-		}
 
 		.combo-input {
 			cursor: pointer;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			gap: 1.25rem;
 			width: 100%;
 			padding: 0.625rem 0.9375rem;
-			gap: 1.25rem;
+			border: 2px solid var(--veryLightGrey);
+			border-radius: 0.3125rem;
 			font-weight: 900;
 			line-height: 1.75rem;
+			&--selected {
+				border-color: var(--primary);
+			}
+			&--open {
+				border-bottom: 0;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
 			&__icon {
 				transition: transform 0.1s;
 				&--rotate {
@@ -174,24 +185,27 @@
 			}
 			&:focus {
 				outline: none;
-				border: none;
 			}
 		}
 		.combo-menu {
 			position: absolute;
+			z-index: 1;
 			top: 100%;
 			left: 0;
-			width: 100%;
-			max-height: 12rem;
 			display: flex;
 			flex-direction: column;
 			align-items: stretch;
-			border-radius: 0.3125rem;
-			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
-			list-style: none;
 			overflow-y: auto;
+			width: 100%;
+			max-height: 12rem;
+			border-color: var(--selected);
+			list-style: none;
 			transition: all 0.5s;
-			z-index: 1;
+
+			&--selected {
+				border-color: var(--primary);
+			}
+
 			&__item {
 				width: 100%;
 				padding: 0.5rem 1rem;
@@ -208,6 +222,7 @@
 			&--open {
 				animation-name: slide-down;
 				animation-duration: 0.2s;
+				animation-fill-mode: forwards;
 			}
 			&--closed {
 				max-height: 0;
@@ -223,6 +238,11 @@
 			}
 			100% {
 				transform: translateY(0);
+				border-style: solid;
+				border-width: 2px;
+				border-top-width: 0;
+				border-bottom-left-radius: 0.3125rem;
+				border-bottom-right-radius: 0.3125rem;
 			}
 		}
 	}

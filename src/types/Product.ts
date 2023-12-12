@@ -22,6 +22,9 @@ export type Product = {
 	description: string
 	category: Category
 	images: string[]
+	brand?: string
+	discount?: number
+	colorsLength?: number
 }
 
 export type Filter = "priceMin" | "priceMax"

@@ -60,7 +60,19 @@ export const useProducts = defineStore("products", {
 
 			id && (path += `&categoryId=${id}`)
 
-			const { data } = await axios.get(path)
+			let { data } = await axios.get(path)
+			//this map is to change the images of the products that are broken in the api
+			data = data.map((product: Product) => {
+				return {
+					...product,
+					images: product.images.map((image: string) => {
+						if (image.includes("https://placeimg.com")) {
+							return `https://picsum.photos/200/300?&random=${Math.floor(Math.random() * 100)}`
+						}
+						return image
+					}),
+				}
+			})
 
 			this.setProducts(data)
 		},

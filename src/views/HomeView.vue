@@ -1,15 +1,22 @@
 <script setup lang="ts">
-	import { ref, onMounted } from "vue"
-	import { useProducts } from "@/stores/products"
+	import { onMounted } from "vue"
 	import { storeToRefs } from "pinia"
+	import type { Filter } from "@/types/Product"
+	import type { Option } from "@/types/ComboBox"
+
+	import { useProducts } from "@/stores/products"
+
 	import ProductCard from "@/components/ProductCard.vue"
 	import FilterRow from "@/components/FilterRow.vue"
+	import LabelComponent from "@/components/LabelComponent.vue"
 
 	const { getProducts, getCategories } = useProducts()
 
-	const { products } = storeToRefs(useProducts())
+	const { products, getAppliedFilters } = storeToRefs(useProducts())
 
-	const appliedFilters = ref<Record<string, string>[]>([])
+	const handleDelete = (filter: Filter, value: Option) => {
+		useProducts().setFilter(filter, value)
+	}
 
 	onMounted(async () => {
 		await getCategories()
@@ -20,13 +27,17 @@
 <template>
 	<main>
 		<header class="main-header">
-			<FilterRow @update:filters="appliedFilters = $event" />
+			<FilterRow />
 			<div class="applied-filters">
-				<h2 class="applied-filter__title">Hai scelto:</h2>
-				<div class="applied-filter__list">
-					<span class="applied-filter__item" v-for="filter in appliedFilters" :key="filter.value">
-						{{ filter.label }}: {{ filter.value }}
-					</span>
+				<h2 class="applied-filters__title">Hai scelto:</h2>
+				<div v-if="Object.keys(getAppliedFilters).length" class="applied-filters__list">
+					<LabelComponent
+						v-for="({ label, value }, filter) in getAppliedFilters"
+						:key="value"
+						class="applied-filters__item"
+						:label="`${label}: ${value}`"
+						@delete="handleDelete(filter as Filter, { label, value: '' })"
+					/>
 				</div>
 			</div>
 		</header>
@@ -59,6 +70,19 @@
 			display: flex;
 			flex-direction: column;
 			gap: 1.25rem;
+			margin-bottom: 1.875rem;
+
+			.applied-filters {
+				display: flex;
+				align-items: center;
+				gap: 0.625rem;
+				&__list {
+					display: flex;
+					align-items: center;
+					flex-wrap: wrap;
+					gap: 0.625rem;
+				}
+			}
 		}
 	}
 </style>

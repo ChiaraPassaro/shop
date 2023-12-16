@@ -116,7 +116,7 @@
 			class="combo-input"
 			:class="{
 				'combo-input--open': isOpen,
-				'combo-input--selected': model.label,
+				'combo-input--selected': model.value,
 			}"
 			:aria-labelledby="`combo-label-${id}`"
 			:aria-controls="`listbox-${id}`"

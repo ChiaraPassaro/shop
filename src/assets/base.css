@@ -4,14 +4,18 @@
   --redLight: #eaaca6;
   --green: #509C50;
   --grey: #4A4A4A;
+  --darkGrey: #666666;
   --lightGrey: #bbbaba;
   --veryLightGrey: #ededed;
+  --white: #fff;
 
   --primary: var(--red);
   --primaryLight: var(--redLight);
   --secondary: var(--green);
   --tertiary: var(--grey);
   --tertiaryLight: var(--veryLightGrey);
+
+  --boxShadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
 }
 
 
@@ -25,7 +29,11 @@
 
 body {
   font-family: 'Mulish', sans-serif;
+}
+
+#app {
   max-width: 1440px;
+  margin: 0 auto;
 }
 
 .sr-only {

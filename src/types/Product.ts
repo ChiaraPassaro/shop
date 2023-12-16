@@ -21,10 +21,12 @@ export type Product = {
 	price: number
 	description: string
 	category: Category
+	creationAt: string
 	images: string[]
 	brand?: string
 	discount?: number
 	colorsLength?: number
+	isNew?: boolean
 }
 
-export type Filter = "priceMin" | "priceMax"
+export type Filter = "price_min" | "price_max" | "only_available"

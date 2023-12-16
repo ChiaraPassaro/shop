@@ -37,6 +37,12 @@
 			background: transparent;
 			border: none;
 			outline: none;
+			color: white;
+			cursor: pointer;
+
+			&:hover {
+				color: var(--primary);
+			}
 		}
 	}
 </style>

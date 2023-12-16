@@ -51,6 +51,23 @@ export const useProducts = defineStore("products", {
 
 			return category ? { label: category.name, value: category.id } : { label: "", value: "" }
 		},
+		getAppliedFilters(): Record<string, Option> {
+			const filters: Record<string, Option> = Object.entries(this.filters)
+				.filter(([key, value]) => {
+					if (value.value || value.value === 0) {
+						return { [key]: value.label }
+					}
+				})
+				.reduce(
+					(acc, [key, value]) => {
+						acc[key] = { label: availableFiltersMap[key], value: value.label }
+						return acc
+					},
+					{} as Record<string, Option>,
+				)
+
+			return filters || {}
+		},
 	},
 	actions: {
 		setProducts(products: Product[]) {
@@ -111,17 +128,6 @@ export const useProducts = defineStore("products", {
 			const { data } = await axios.get(path)
 
 			return data
-		},
-		getAppliedFilters(): Record<string, string>[] | [] {
-			const filters: Record<string, string>[] = Object.entries(this.filters)
-				.filter(([key, value]) => {
-					if (value.value || value.value === 0) {
-						return { [key]: value.label }
-					}
-				})
-				.map(([key, value]) => ({ label: availableFiltersMap[key], value: value.label }))
-
-			return filters || []
 		},
 	},
 })

@@ -74,6 +74,7 @@
 	const selected = ref(model.value ? props.options.findIndex(({ value }) => value === model.value.value) : 1)
 
 	watch(selected, async () => {
+		if (!isOpen.value) return
 		await listbox.value[selected.value].scrollIntoView({ block: "end", inline: "nearest" })
 	})
 

@@ -10,6 +10,6 @@
 
 <style scoped lang="scss">
 	.close-icon {
-		transition: all 0.3s ease-in-out;
+		transition: all 0.1s ease-in-out;
 	}
 </style>

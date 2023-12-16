@@ -8,10 +8,8 @@
 
 	import ComboBox from "./ComboBox.vue"
 	import CheckBox from "./CheckBox.vue"
-	const { setSelectedCategory, setFilter, getProducts, getAppliedFilters } = useProducts()
+	const { setSelectedCategory, setFilter, getProducts } = useProducts()
 	const { categories, getSelectedCategory, filters } = storeToRefs(useProducts())
-
-	const emits = defineEmits<{ "update:filters": [value: Record<string, string>[]] }>()
 
 	const categoriesOptions = computed(() => categories.value.map(({ name, id }) => ({ label: name, value: id })))
 
@@ -25,7 +23,6 @@
 		}
 		setFilter(filter, { label, value })
 		getProducts()
-		emits("update:filters", getAppliedFilters())
 	}
 </script>
 

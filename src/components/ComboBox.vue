@@ -45,29 +45,49 @@
 		set: (value) => emit("update:modelValue", value),
 	})
 
+	const handleScroll = () => {
+		if (isOpen.value) {
+			const scrollbarWidth = window.innerWidth - document.body.offsetWidth
+
+			document.body.style.overflow = "hidden"
+			document.body.style.paddingRight = `${scrollbarWidth}px`
+		}
+		if (!isOpen.value) {
+			document.body.style.overflow = "auto"
+			document.body.style.paddingRight = ""
+		}
+	}
+
 	const handleOpen = async () => {
 		isOpen.value = !isOpen.value
+		handleScroll()
 		emit("update:open", isOpen.value)
 	}
 
 	const handleSelect = ({ label, value }: Option) => {
-		isOpen.value = false
+		handleOpen()
 
-		emit("update:modelValue", label === "Reset" ? props.resetValue : { label, value })
+		emit("update:modelValue", value === "reset" ? props.resetValue : { label, value })
 		emit("update:open", isOpen.value)
 	}
 
-	const selected = ref(model.value ? props.options.findIndex(({ value }) => value === model.value.value) : 0)
+	const selected = ref(model.value ? props.options.findIndex(({ value }) => value === model.value.value) : 1)
+
+	watch(selected, async () => {
+		await listbox.value[selected.value].scrollIntoView({ block: "end", inline: "nearest" })
+	})
 
 	const handleClickOutside = (event: MouseEvent) => {
+		if (!isOpen.value) return
 		const target = event.target as HTMLElement
-		if (!target.closest(`#selector-${props.id}`)) {
+		if (!target.closest(`#selector-${props.id} .combo-input`)) {
 			isOpen.value = false
+			handleScroll()
 		}
 	}
 
 	const options = computed(() => {
-		return [{ label: "Reset", value: "" }, ...props.options]
+		return [{ label: "Reset", value: "reset" }, ...props.options]
 	})
 
 	watch(
@@ -111,7 +131,7 @@
 			@keydown.tab="isOpen && handleOpen()"
 			@click="handleOpen"
 		>
-			<span>{{ model?.label || resetValue.label }}</span>
+			<span class="combo-input__selected-value">{{ model?.label || resetValue.label }}</span>
 			<ArrowDown
 				class="combo-input__icon"
 				:class="{ 'combo-input__icon--rotate': isOpen }"
@@ -149,12 +169,10 @@
 <style scoped lang="scss">
 	.selector {
 		--selected: var(--veryLightGrey);
-
 		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
-		min-width: 11.5rem;
 		transition: all 0.1s;
 
 		.combo-input {
@@ -169,6 +187,7 @@
 			border-radius: 0.3125rem;
 			font-weight: 900;
 			line-height: 1.75rem;
+
 			&--selected {
 				border-color: var(--primary);
 			}
@@ -176,6 +195,9 @@
 				border-bottom: 0;
 				border-bottom-left-radius: 0;
 				border-bottom-right-radius: 0;
+			}
+			&__selected-value {
+				white-space: nowrap;
 			}
 			&__icon {
 				transition: transform 0.1s;
@@ -196,9 +218,11 @@
 			flex-direction: column;
 			align-items: stretch;
 			overflow-y: auto;
+
 			width: 100%;
 			max-height: 12rem;
 			border-color: var(--selected);
+			background: var(--white);
 			list-style: none;
 			transition: all 0.5s;
 

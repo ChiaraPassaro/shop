@@ -15,7 +15,6 @@
 		},
 		resetValue: {
 			type: Object as PropType<Option>,
-			default: { label: "", value: "" } as Option,
 		},
 		id: {
 			type: String,
@@ -33,6 +32,9 @@
 			type: Boolean,
 		},
 		open: {
+			type: Boolean,
+		},
+		borderless: {
 			type: Boolean,
 		},
 	})
@@ -67,7 +69,7 @@
 	const handleSelect = ({ label, value }: Option) => {
 		handleOpen()
 
-		emit("update:modelValue", value === "reset" ? props.resetValue : { label, value })
+		props.resetValue && emit("update:modelValue", value === "reset" ? props.resetValue : { label, value })
 		emit("update:open", isOpen.value)
 	}
 
@@ -88,7 +90,7 @@
 	}
 
 	const options = computed(() => {
-		return [{ label: "Reset", value: "reset" }, ...props.options]
+		return props.resetValue ? [{ label: "Reset", value: "reset" }, ...props.options] : props.options
 	})
 
 	watch(
@@ -108,7 +110,11 @@
 </script>
 
 <template>
-	<div :id="`selector-${id}`" class="selector" :class="{ 'selector--open': isOpen }">
+	<div
+		:id="`selector-${id}`"
+		class="selector"
+		:class="{ 'selector--open': isOpen, 'selector--borderless': borderless }"
+	>
 		<label :id="`combo-label-${id}`" :class="{ 'sr-only': !showLabel }">{{ label }}</label>
 
 		<div
@@ -132,7 +138,7 @@
 			@keydown.tab="isOpen && handleOpen()"
 			@click="handleOpen"
 		>
-			<span class="combo-input__selected-value">{{ model?.label || resetValue.label }}</span>
+			<span class="combo-input__selected-value">{{ model?.label || resetValue?.label || "Select Value" }}</span>
 			<ArrowDown
 				class="combo-input__icon"
 				:class="{ 'combo-input__icon--rotate': isOpen }"
@@ -170,10 +176,14 @@
 <style scoped lang="scss">
 	.selector {
 		--selected: var(--veryLightGrey);
+		--lineHeight: 1.5rem;
+		--padding: 0.625rem 0.9375rem;
+
 		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
+		background: white;
 		transition: all 0.1s;
 
 		.combo-input {
@@ -183,17 +193,15 @@
 			align-items: center;
 			gap: 1.25rem;
 			width: 100%;
-			padding: 0.625rem 0.9375rem;
-			border: 2px solid var(--veryLightGrey);
-			border-radius: 0.3125rem;
+			padding: var(--padding);
+			border: 2px solid transparent;
 			font-weight: 900;
-			line-height: 1.75rem;
+			line-height: var(--lineHeight);
 
-			&--selected {
-				border-color: var(--primary);
-			}
 			&--open {
-				border-bottom: 0;
+				border: 2px solid var(--veryLightGrey);
+				border-radius: 0;
+				border-bottom-color: transparent;
 				border-bottom-left-radius: 0;
 				border-bottom-right-radius: 0;
 			}
@@ -208,6 +216,20 @@
 			}
 			&:focus {
 				outline: none;
+			}
+		}
+
+		&:not(.selector--borderless) .combo-input {
+			border: 2px solid var(--veryLightGrey);
+			border-radius: 0.3125rem;
+
+			&--selected {
+				border-color: var(--primary);
+			}
+			&--open {
+				border-bottom: 0;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
 			}
 		}
 		.combo-menu {

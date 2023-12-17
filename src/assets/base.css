@@ -41,6 +41,9 @@ body {
   border: none;
   outline: none;
   cursor: pointer;
+  svg {
+    display: block;
+  }
 }
 
 .btn--primary {
@@ -51,6 +54,13 @@ body {
   transition: all 0.2s ease-in-out;
   &:hover {
     background-color: var(--primaryLight);
+  }
+}
+
+.btn--primary-borderless {
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    color: var(--primary);
   }
 }
 

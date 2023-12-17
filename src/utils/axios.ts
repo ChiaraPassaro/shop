@@ -2,13 +2,11 @@
 import axios from "axios"
 //sets the base URL of the API
 axios.defaults.baseURL = "https://api.escuelajs.co/api/v1/"
+
 //sets the default headers for the API
 axios.defaults.headers.common["Content-Type"] = "application/json"
 
-axios.create({
-	baseURL: "https://otp.dev/api/", // Replace with your API base URL
-})
-
+axios.create()
 //create an axios interceptor to handle errors
 axios.interceptors.response.use(
 	(response) => {

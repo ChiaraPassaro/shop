@@ -149,6 +149,12 @@
 		@media (max-width: 960px) {
 			& {
 				justify-content: center;
+				padding: 0.375rem 0rem;
+				border: 1px solid var(--lightGrey);
+			}
+			&__title {
+				font-size: 1rem;
+				font-weight: 500;
 			}
 			&__title,
 			&__icon,

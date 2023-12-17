@@ -2,6 +2,11 @@
 	import { ref } from "vue"
 	import { RouterLink } from "vue-router"
 	import ComboBox from "~/ComboBox.vue"
+	import InputComponent from "~/InputComponent.vue"
+	import AccountIcon from "~/icons/AccountIcon.vue"
+	import HeartIcon from "~/icons/HeartIcon.vue"
+	import CartIcon from "~/icons/CartIcon.vue"
+	import MenuIcon from "~/icons/MenuIcon.vue"
 
 	const topMenuItems = [
 		{ path: "", name: "Chi siamo" },
@@ -40,9 +45,37 @@
 		</nav>
 
 		<div class="header__main">
-			<RouterLink to="/">
+			<button class="header__main-menu-btn btn btn--primary-borderless">
+				<MenuIcon />
+				<span>Menu</span>
+			</button>
+
+			<RouterLink class="header__main-logo" to="/">
 				<img src="@/assets/logo.svg" alt="logo" />
 			</RouterLink>
+
+			<InputComponent
+				class="header__search-input"
+				id="search"
+				label="search"
+				placeholder="Cerca un prodotto"
+				labelHidden
+			/>
+
+			<ul class="header__main-actions list-inline">
+				<li class="list-inline__item">
+					<button class="btn btn--primary-borderless"><AccountIcon /></button>
+				</li>
+				<li class="list-inline__item">
+					<button class="btn btn--primary-borderless"><HeartIcon /></button>
+				</li>
+				<li class="list-inline__item">
+					<button class="btn btn--primary-borderless cart-button">
+						<span class="cart-button__product-quantity">3</span>
+						<CartIcon />
+					</button>
+				</li>
+			</ul>
 		</div>
 
 		<nav class="header__main-nav">
@@ -78,6 +111,54 @@
 
 		&__main {
 			padding: 1.88rem 6.5rem;
+			display: flex;
+			justify-content: space-between;
+
+			@media (max-width: 960px) {
+				& {
+					justify-content: flex-start;
+					gap: 1.3125rem;
+				}
+				&-logo {
+					display: none;
+				}
+			}
+
+			&-actions {
+				gap: 1.26rem;
+
+				@media (max-width: 960px) {
+					& {
+						display: none;
+					}
+				}
+
+				li {
+					margin: 0;
+				}
+				.cart-button {
+					position: relative;
+					&__product-quantity {
+						position: absolute;
+						top: -50%;
+						right: -50%;
+						background-color: var(--primary);
+						color: var(--white);
+						border-radius: 50%;
+						width: 1.25rem;
+						height: 1.25rem;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						font-size: 0.75rem;
+					}
+				}
+			}
+		}
+
+		&__search-input {
+			width: 100%;
+			max-width: 25rem;
 		}
 
 		&__main-menu {
@@ -87,6 +168,23 @@
 			border-top: 1px solid;
 			border-color: var(--lightGrey);
 			margin-bottom: 3.75rem;
+			&-btn {
+				display: none;
+			}
+			@media (max-width: 960px) {
+				&-btn {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					font-size: 0.8125rem;
+					text-transform: uppercase;
+				}
+
+				& {
+					display: none;
+				}
+			}
 
 			.router-link {
 				display: block;

@@ -4,19 +4,25 @@
 	import type { Filter } from "@/types/Product"
 	import type { Option } from "@/types/ComboBox"
 
-	import { useProducts } from "@/stores/products"
+	import { useProducts } from "@/stores/useProducts"
+	import { useLoader } from "@/stores/useLoader"
 
 	import ProductCard from "~/ProductCard.vue"
 	import FilterRow from "~/FilterRow.vue"
 	import LabelComponent from "~/LabelComponent.vue"
 	import OrderbyComponent from "~/OrderbyComponent.vue"
+	import LoaderComponent from "~/LoaderComponent.vue"
+	import PaginationComponent from "~/PaginationComponent.vue"
 
-	const { getProducts, getCategories } = useProducts()
+	const loaderStore = useLoader()
 
-	const { products, getAppliedFilters } = storeToRefs(useProducts())
+	const { getProducts, getCategories, getPage, setFilter } = useProducts()
 
-	const handleDelete = (filter: Filter, value: Option) => {
-		useProducts().setFilter(filter, value)
+	const { products, getAppliedFilters, page, totalPages } = storeToRefs(useProducts())
+
+	const handleDelete = async (filter: Filter, value: Option) => {
+		setFilter(filter, value)
+		await getProducts()
 	}
 
 	const orderByOptions = {
@@ -56,6 +62,18 @@
 		<div v-if="products.length" class="products">
 			<ProductCard v-for="product in products" :key="product.id" v-bind="product" />
 		</div>
+		<div v-else class="no-products">
+			<h2 class="no-products__title">Nessun prodotto trovato</h2>
+		</div>
+
+		<PaginationComponent
+			v-if="totalPages > 0"
+			:currentPage="page"
+			:totalPages="totalPages"
+			@update:currentPage="getPage"
+		/>
+
+		<LoaderComponent v-if="loaderStore.loading" />
 	</main>
 </template>
 

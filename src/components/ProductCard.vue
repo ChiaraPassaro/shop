@@ -3,7 +3,7 @@
 	import { computed, type PropType } from "vue"
 
 	import HeartIcon from "@/components/icons/HeartIcon.vue"
-	import { currency } from "@/stores/products"
+	import { currency } from "@/stores/useProducts"
 
 	const props = defineProps({
 		id: {

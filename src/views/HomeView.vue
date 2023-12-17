@@ -6,9 +6,10 @@
 
 	import { useProducts } from "@/stores/products"
 
-	import ProductCard from "@/components/ProductCard.vue"
-	import FilterRow from "@/components/FilterRow.vue"
-	import LabelComponent from "@/components/LabelComponent.vue"
+	import ProductCard from "~/ProductCard.vue"
+	import FilterRow from "~/FilterRow.vue"
+	import LabelComponent from "~/LabelComponent.vue"
+	import OrderbyComponent from "~/OrderbyComponent.vue"
 
 	const { getProducts, getCategories } = useProducts()
 
@@ -16,6 +17,13 @@
 
 	const handleDelete = (filter: Filter, value: Option) => {
 		useProducts().setFilter(filter, value)
+	}
+
+	const orderByOptions = {
+		popularity: { label: "Popolarità", value: "popularity" },
+		min_price: { label: "Prezzo Minore", value: "price_min" },
+		max_price: { label: "Prezzo Maggiore", value: "price_max" },
+		name: { label: "Nome", value: "name" },
 	}
 
 	onMounted(async () => {
@@ -42,23 +50,7 @@
 				</div>
 			</div>
 
-			<div class="order-by">
-				<h2 class="order-by__title">Ordina per:</h2>
-				<ul class="order-by__menu list-inline">
-					<li class="list-inline__item active">
-						<button class="btn">Popolarità</button>
-					</li>
-					<li class="list-inline__item">
-						<button class="btn">Prezzo Minore</button>
-					</li>
-					<li class="list-inline__item">
-						<button class="btn">Prezzo Maggiore</button>
-					</li>
-					<li class="list-inline__item">
-						<button class="btn">Nome</button>
-					</li>
-				</ul>
-			</div>
+			<OrderbyComponent :options="orderByOptions" title="Ordina per:" />
 		</header>
 
 		<div v-if="products.length" class="products">
@@ -107,28 +99,6 @@
 					align-items: center;
 					flex-wrap: wrap;
 					gap: 0.625rem;
-				}
-			}
-			.order-by {
-				display: flex;
-				align-items: center;
-				gap: 1.8rem;
-				border-bottom: 1px solid var(--lightGrey);
-
-				&__title,
-				&__menu button {
-					padding-bottom: 0.3rem;
-					font-size: 0.875rem;
-					text-transform: uppercase;
-				}
-				&__menu .list-inline__item {
-					height: 100%;
-					border-bottom: 3px solid transparent;
-					&.active,
-					&:hover {
-						height: 100%;
-						border-bottom: 3px solid var(--primary);
-					}
 				}
 			}
 		}

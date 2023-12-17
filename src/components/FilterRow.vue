@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { computed, ref } from "vue"
 	import { storeToRefs } from "pinia"
-	import { useProducts, defaultFiltersPrice } from "@/stores/products"
+	import { useProducts, defaultFiltersPrice } from "@/stores/useProducts"
 
 	import type { CategoryName, Filter } from "@/types/Product"
 	import type { Option } from "@/types/ComboBox"
@@ -20,12 +20,13 @@
 		setSelectedCategory(label)
 		getProducts()
 	}
-	const handleChangeFilter = (filter: Filter, { label, value }: Option) => {
+	const handleChangeFilter = async (filter: Filter, { label, value }: Option) => {
 		if (filter === "price_min" && value) {
 			setFilter("price_max", defaultFiltersPrice[defaultFiltersPrice.length - 1])
 		}
 		setFilter(filter, { label, value })
-		getProducts()
+
+		await getProducts()
 	}
 
 	const open = ref(false)

@@ -57,7 +57,7 @@
 		<header class="product-card__header">
 			<img class="product-card__image" v-if="images?.length" :src="images[0]" :alt="title" />
 			<div class="product-card__add-to-preferred">
-				<HeartIcon />
+				<button class="btn btn--primary-borderless"><HeartIcon /></button>
 			</div>
 			<div v-if="isNew" class="product-card__badge">New</div>
 		</header>
@@ -107,14 +107,13 @@
 			align-items: center;
 			width: 2.25rem;
 			height: 2.25rem;
-			background-color: #fff;
+			background-color: white;
 			border-radius: 50%;
+			transition: all 0.3s ease-in-out;
 			&:hover {
+				color: var(--heartFillHover);
 				background-color: var(--heartBgHover);
 				cursor: pointer;
-				:deep(.fill) {
-					fill: var(--heartFillHover);
-				}
 			}
 		}
 		&__image {
@@ -167,7 +166,7 @@
 			font-size: 0.875rem;
 			font-weight: 800;
 			text-align: center;
-			color: #fff;
+			color: white;
 		}
 	}
 </style>

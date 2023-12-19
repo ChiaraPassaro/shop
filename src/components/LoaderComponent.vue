@@ -38,8 +38,8 @@
 
 		.inner-path {
 			animation:
-				dash 1s linear infinite,
-				color 1s linear infinite;
+				dash 3s linear infinite,
+				color 3s linear infinite;
 			stroke-dasharray: 0, 240;
 			stroke-dashoffset: 0;
 			stroke-linecap: round;
@@ -65,17 +65,17 @@
 	@keyframes color {
 		0% {
 			color: #fff;
-			stroke: #4fa2f7;
+			stroke: var(--blue);
 		}
 
 		66% {
-			color: #d84eaf;
-			stroke: #d84eaf;
+			color: var(--primary);
+			stroke: var(--primary);
 		}
 
 		100% {
 			color: #fff;
-			stroke: #4fa2f7;
+			stroke: var(--blue);
 		}
 	}
 </style>

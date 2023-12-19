@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import type { Category } from "@/types/Product"
-	import { computed, type PropType } from "vue"
+	import { computed, ref, type PropType, watch, onMounted } from "vue"
 
 	import HeartIcon from "@/components/icons/HeartIcon.vue"
 	import { currency } from "@/stores/useProducts"
@@ -50,12 +50,33 @@
 		return props.price
 	})
 
+	type Image = { src: string; complete: boolean }
+
+	const image = computed<Image | undefined>(() => {
+		if (props.images?.length) {
+			const img = new Image()
+			img.src = props.images[0]
+			return img
+		}
+		return undefined
+	})
+
+	const imageComplete = ref(false)
+
 	const colors = computed(() => `${props.colorsLength} color${props.colorsLength > 1 ? "i" : "e"}`)
 </script>
 <template>
 	<section class="product-card">
 		<header class="product-card__header">
-			<img class="product-card__image" v-if="images?.length" :src="images[0]" :alt="title" />
+			<div class="product-card__image" :class="{ 'product-card__image--skeleton': !imageComplete }">
+				<img
+					v-if="images?.length"
+					class="product-card__image"
+					:src="image?.src"
+					:alt="title"
+					@load="imageComplete = true"
+				/>
+			</div>
 			<div class="product-card__add-to-preferred">
 				<button class="btn btn--primary-borderless"><HeartIcon /></button>
 			</div>
@@ -117,11 +138,22 @@
 			}
 		}
 		&__image {
-			display: block;
-			width: 100%;
-			max-height: 13.75rem;
-			aspect-ratio: 1.5/ 1;
-			object-fit: cover;
+			img {
+				display: block;
+				width: 100%;
+				max-height: 13.75rem;
+				aspect-ratio: 1.5/ 1;
+				object-fit: cover;
+			}
+			&--skeleton {
+				background-color: var(--lightGrey);
+				width: 100%;
+				max-height: 13.75rem;
+				aspect-ratio: 1.5/ 1;
+				img {
+					display: none;
+				}
+			}
 		}
 		&__badge {
 			position: absolute;

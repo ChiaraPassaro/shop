@@ -120,6 +120,7 @@ export const useProducts = defineStore("products", {
 					discount: Math.floor(Math.random() * 48),
 					colorsLength: Math.floor(Math.random() * 5 + 1),
 					isNew: new Date(product.creationAt) > getSevenDaysAgo(),
+					// images: product.images.map(() => "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"),
 				}
 			})
 

@@ -39,6 +39,7 @@
 </script>
 
 <template>
+	<!-- TODO: breadcrumbs -->
 	<main class="main">
 		<header class="main__header">
 			<FilterRow />
@@ -73,6 +74,7 @@
 			@update:currentPage="getPage"
 		/>
 
+		<!-- <LoaderComponent v-if="true" /> uncomment this to see the animation loader -->
 		<LoaderComponent v-if="loaderStore.loading" />
 	</main>
 </template>

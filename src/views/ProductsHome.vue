@@ -6,6 +6,7 @@
 
 	import { useProducts } from "@/stores/useProducts"
 	import { useLoader } from "@/stores/useLoader"
+	import { useRouter } from "vue-router"
 
 	import ProductCard from "~/ProductCard.vue"
 	import FilterRow from "~/FilterRow.vue"
@@ -13,7 +14,7 @@
 	import OrderbyComponent from "~/OrderbyComponent.vue"
 	import LoaderComponent from "~/LoaderComponent.vue"
 	import PaginationComponent from "~/PaginationComponent.vue"
-	import { useRouter } from "vue-router"
+	import BreadCrumbs from "~/BreadCrumbs.vue"
 
 	const loaderStore = useLoader()
 
@@ -36,7 +37,7 @@
 	}
 
 	const changeRoute = (id: number) => {
-		router.push({ path: `/product/${id}` })
+		router.push({ name: `Product`, params: { id: id.toString() } })
 	}
 
 	onMounted(async () => {
@@ -46,9 +47,9 @@
 </script>
 
 <template>
-	<!-- TODO: breadcrumbs -->
-	<main class="main">
+	<main v-if="$route.path === '/'" class="main">
 		<header class="main__header">
+			<BreadCrumbs />
 			<FilterRow />
 
 			<div v-if="Object.keys(getAppliedFilters).length" class="applied-filters">
@@ -84,6 +85,7 @@
 		<!-- <LoaderComponent v-if="true" /> uncomment this to see the animation loader -->
 		<LoaderComponent v-if="loaderStore.loading" />
 	</main>
+	<routerView v-else />
 </template>
 
 <style scoped lang="scss">

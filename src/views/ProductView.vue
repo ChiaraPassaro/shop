@@ -5,6 +5,8 @@
 	import { useProducts } from "@/stores/useProducts"
 	import { getImage } from "@/utils/commons"
 
+	import BreadCrumbs from "~/BreadCrumbs.vue"
+
 	type ImageMapped = {
 		src: string
 		completed: boolean
@@ -53,7 +55,7 @@
 			</div>
 
 			<div class="product__header-info">
-				<div class="breadcrumbs"></div>
+				<BreadCrumbs :currentPage="`${product.brand} ${product.title}`" />
 
 				<small class="product__brand">{{ product.brand }}</small>
 				<h2 class="product__title">{{ product.title }}</h2>

@@ -208,6 +208,7 @@
 				text-transform: uppercase;
 
 				&:hover,
+				&-active,
 				&-exact-active {
 					border-bottom: 3px solid var(--primary);
 					color: var(--primary);

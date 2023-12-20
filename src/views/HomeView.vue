@@ -13,12 +13,15 @@
 	import OrderbyComponent from "~/OrderbyComponent.vue"
 	import LoaderComponent from "~/LoaderComponent.vue"
 	import PaginationComponent from "~/PaginationComponent.vue"
+	import { useRouter } from "vue-router"
 
 	const loaderStore = useLoader()
 
 	const { getProducts, getCategories, getPage, setFilter } = useProducts()
 
 	const { products, getAppliedFilters, page, totalPages } = storeToRefs(useProducts())
+
+	const router = useRouter()
 
 	const handleDelete = async (filter: Filter, value: Option) => {
 		setFilter(filter, value)
@@ -30,6 +33,10 @@
 		min_price: { label: "Prezzo Minore", value: "price_min" },
 		max_price: { label: "Prezzo Maggiore", value: "price_max" },
 		name: { label: "Nome", value: "name" },
+	}
+
+	const changeRoute = (id: number) => {
+		router.push({ path: `/product/${id}` })
 	}
 
 	onMounted(async () => {
@@ -61,7 +68,7 @@
 		</header>
 
 		<div v-if="products.length" class="products">
-			<ProductCard v-for="product in products" :key="product.id" v-bind="product" />
+			<ProductCard @click="changeRoute(product.id)" v-for="product in products" :key="product.id" v-bind="product" />
 		</div>
 		<div v-else class="no-products">
 			<h2 class="no-products__title">Nessun prodotto trovato</h2>

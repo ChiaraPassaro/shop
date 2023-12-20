@@ -1,9 +1,10 @@
 <script setup lang="ts">
 	import type { Category } from "@/types/Product"
-	import { computed, ref, type PropType, watch, onMounted } from "vue"
+	import { computed, ref, type PropType } from "vue"
 
 	import HeartIcon from "@/components/icons/HeartIcon.vue"
 	import { currency } from "@/stores/useProducts"
+	import { getImage } from "@/utils/commons"
 
 	const props = defineProps({
 		id: {
@@ -50,29 +51,18 @@
 		return props.price
 	})
 
-	type Image = { src: string; complete: boolean }
-
-	const image = computed<Image | undefined>(() => {
-		if (props.images?.length) {
-			const img = new Image()
-			img.src = props.images[0]
-			return img
-		}
-		return undefined
-	})
-
 	const imageComplete = ref(false)
 
 	const colors = computed(() => `${props.colorsLength} color${props.colorsLength > 1 ? "i" : "e"}`)
 </script>
 <template>
-	<section class="product-card">
-		<header class="product-card__header">
+	<button class="product-card">
+		<div class="product-card__header">
 			<div class="product-card__image" :class="{ 'product-card__image--skeleton': !imageComplete }">
 				<img
 					v-if="images?.length"
 					class="product-card__image"
-					:src="image?.src"
+					:src="getImage(images[0]).src"
 					:alt="title"
 					@load="imageComplete = true"
 				/>
@@ -81,7 +71,7 @@
 				<button class="btn btn--primary-borderless"><HeartIcon /></button>
 			</div>
 			<div v-if="isNew" class="product-card__badge">New</div>
-		</header>
+		</div>
 
 		<div class="product-card__info">
 			<span class="product-card__brand">{{ brand }}</span>
@@ -99,7 +89,7 @@
 				<span class="product-card__price-discount-badge">{{ discount }}%</span>
 			</div>
 		</div>
-	</section>
+	</button>
 </template>
 
 <style scoped lang="scss">
@@ -108,6 +98,7 @@
 		--heartFillHover: #9f2c2c;
 		--colors-color: var(--darkGrey);
 
+		all: unset;
 		display: flex;
 		flex-direction: column;
 		gap: 1.25rem;
@@ -115,6 +106,7 @@
 		padding-bottom: 1.25rem;
 		box-shadow: var(--boxShadow);
 		text-align: center;
+		cursor: pointer;
 
 		&__header {
 			position: relative;

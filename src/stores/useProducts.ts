@@ -143,6 +143,7 @@ export const useProducts = defineStore("products", {
 			const { data } = await axios.get(path)
 
 			//mock data
+			data.brand = "Brand"
 			data.discount = Math.floor(Math.random() * 48)
 			data.colorsLength = Math.floor(Math.random() * 5 + 1)
 			data.isNew = new Date(data.creationAt) > getSevenDaysAgo()

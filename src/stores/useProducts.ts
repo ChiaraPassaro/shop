@@ -137,10 +137,18 @@ export const useProducts = defineStore("products", {
 
 			this.setCategories(filteredCategories)
 		},
-		async getProductById(id: number) {
+		async getProductById(id: string): Promise<Product> {
 			const path = `/products/${id}`
 
 			const { data } = await axios.get(path)
+
+			//mock data
+			data.discount = Math.floor(Math.random() * 48)
+			data.colorsLength = Math.floor(Math.random() * 5 + 1)
+			data.isNew = new Date(data.creationAt) > getSevenDaysAgo()
+			data.guarantee = Math.floor(Math.random() * 12 + 1)
+			data.strengths = ["Lorem ipsum dolor sit amet.", "Quisquam, voluptatum.", "Amet consectetur adipisicing elit. "]
+			data.images.length < 2 && (data.images = [data.images[0], data.images[0], data.images[0]])
 
 			return data
 		},

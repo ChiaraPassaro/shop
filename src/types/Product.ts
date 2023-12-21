@@ -34,3 +34,8 @@ export type Product = {
 }
 
 export type Filter = "price_min" | "price_max" | "only_available"
+
+export type ImageMapped = {
+	src: string
+	completed: boolean
+}

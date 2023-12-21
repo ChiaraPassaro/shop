@@ -1,16 +1,12 @@
 <script setup lang="ts">
-	import { onMounted, ref, watch } from "vue"
-	import type { Product } from "@/types/Product"
+	import { computed, onMounted, ref, watch } from "vue"
+	import type { ImageMapped, Product } from "@/types/Product"
 
 	import { useProducts } from "@/stores/useProducts"
 	import { getImage } from "@/utils/commons"
 
 	import BreadCrumbs from "~/BreadCrumbs.vue"
-
-	type ImageMapped = {
-		src: string
-		completed: boolean
-	}
+	import OtherProducts from "~/OtherProducts.vue"
 
 	const props = defineProps({
 		id: {
@@ -19,10 +15,26 @@
 		},
 	})
 
-	const { getProductById } = useProducts()
+	const { getProductById, getOtherProducts } = useProducts()
 	const product = ref<Product>()
 
 	const imagesMapped = ref<ImageMapped[]>()
+
+	const otherProducts = ref<Product[]>([])
+
+	const pages = 3
+	const limitSlider = 4
+	const offsetSlider = ref(0)
+	const currentSliderPage = ref(1)
+
+	const getOtherProductsPaginated = computed(() =>
+		otherProducts.value.slice(offsetSlider.value, offsetSlider.value + limitSlider),
+	)
+
+	const changeSliderPage = (page: number, step: number) => {
+		currentSliderPage.value = page + step
+		offsetSlider.value = (currentSliderPage.value - 1) * limitSlider
+	}
 
 	watch(
 		() => product.value?.images,
@@ -37,6 +49,7 @@
 
 	onMounted(async () => {
 		product.value = await getProductById(props.id)
+		otherProducts.value = await getOtherProducts(product.value.category.id, product.value.id)
 	})
 </script>
 
@@ -80,26 +93,25 @@
 		<div class="product__description">
 			{{ product.description }}
 		</div>
-
-		<footer>
-			<div class="products__others">
-				<h3 class="products__others-title"></h3>
-				<ul class="products__others-list slider">
-					<li class="products__others-item"></li>
-				</ul>
-			</div>
-		</footer>
 	</main>
+	<OtherProducts
+		v-if="otherProducts.length"
+		:pages="pages"
+		:limit="limitSlider"
+		:offset="offsetSlider"
+		:currentPage="currentSliderPage"
+		:products="getOtherProductsPaginated"
+		@changePage="changeSliderPage"
+	/>
 </template>
 
 <style lang="scss">
 	.product {
-		padding: 0 6.5rem;
-
 		&__header {
 			display: grid;
 			grid-template-columns: 1.5fr 1fr;
 			gap: 1.56rem;
+			padding: 0 6.5rem;
 		}
 		&__header-images {
 			display: grid;
@@ -133,6 +145,52 @@
 				&:nth-child(1).product__header-images-image--skeleton,
 				&:nth-child(1) img {
 					aspect-ratio: 1 / 1;
+				}
+			}
+		}
+		&__description {
+			padding: 0 6.5rem;
+		}
+		&__other {
+			display: flex;
+			flex-direction: column;
+			gap: 3.75rem;
+			position: relative;
+			padding: 0 4.2rem;
+			margin: 3.75rem 0;
+			&-title {
+				color: #000;
+				font-size: 1.9rem;
+				font-weight: 800;
+			}
+			&-slider {
+				display: flex;
+				justify-content: space-between;
+				justify-content: center;
+				gap: 1.56rem;
+			}
+			&-list {
+				flex-grow: 1;
+				display: flex;
+				justify-content: center;
+				gap: 1.56rem;
+				.product-card {
+					width: calc(100% / 4);
+				}
+			}
+			&-slider-stepper {
+				display: flex;
+				justify-content: center;
+				gap: 1.56rem;
+				&-item {
+					width: 0.8rem;
+					height: 0.8rem;
+					border-radius: 50%;
+					list-style: none;
+					background-color: var(--lightGrey);
+					&--active {
+						background-color: var(--primary);
+					}
 				}
 			}
 		}

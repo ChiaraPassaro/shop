@@ -10,7 +10,7 @@ export type CategoryName =
 	| "Books"
 
 export type Category = {
-	id: number
+	id: string
 	name: CategoryName
 	image: string
 }

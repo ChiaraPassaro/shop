@@ -159,5 +159,20 @@ export const useProducts = defineStore("products", {
 
 			await this.getProducts()
 		},
+		async getOtherProducts(categoryId: string, productId: number) {
+			const path = `/products/?&categoryId=${categoryId}`
+
+			let { data: completeData } = await axios.get(`${path}&limit=12&offset=0`)
+			completeData = completeData.filter(({ id }: Product) => id !== productId)
+
+			return completeData.map((product: Product) => {
+				return {
+					...product,
+					discount: Math.floor(Math.random() * 48),
+					colorsLength: Math.floor(Math.random() * 5 + 1),
+					isNew: new Date(product.creationAt) > getSevenDaysAgo(),
+				}
+			})
+		},
 	},
 })

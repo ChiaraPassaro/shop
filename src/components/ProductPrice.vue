@@ -31,13 +31,14 @@
 		</p>
 		<div class="product-price__discount" v-if="discount">
 			<span class="product-price__origin">{{ price }}{{ currency }}</span>
-			<span class="product-price__discount-badge">{{ discount }}%</span>
+			<span class="product-price__discount-badge">-{{ discount }}%</span>
 		</div>
 	</div>
 </template>
 
 <style scoped lang="scss">
 	.product-price {
+		width: 100%;
 		&--single-row {
 			display: flex;
 			justify-content: space-between;

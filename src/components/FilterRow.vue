@@ -89,7 +89,7 @@
 			
 			@change="handleChangeFilter('only_available', $event)"
 			-->
-				<CheckBox label="Solo disponibili" id="only-available" />
+				<CheckBox label="Solo disponibili" id="only-available" name="only-available" />
 			</div>
 
 			<button class="filter-row__btn-close btn btn--primary" @click="handleOpen">Visualizza i risultati</button>

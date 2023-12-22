@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { computed, ref } from "vue"
+	import { computed, onMounted, ref } from "vue"
 	import { storeToRefs } from "pinia"
 	import { useProducts, defaultFiltersPrice } from "@/stores/useProducts"
 
@@ -33,6 +33,14 @@
 	const handleOpen = () => {
 		open.value = !open.value
 	}
+
+	onMounted(() => {
+		window.addEventListener("resize", () => {
+			if (window.innerWidth > 960) {
+				open.value = false
+			}
+		})
+	})
 </script>
 
 <template>

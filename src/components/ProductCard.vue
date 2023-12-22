@@ -1,10 +1,11 @@
 <script setup lang="ts">
-	import type { Category } from "@/types/Product"
 	import { computed, ref, type PropType } from "vue"
+	import type { Category } from "@/types/Product"
 
-	import HeartIcon from "@/components/icons/HeartIcon.vue"
-	import { currency } from "@/stores/useProducts"
 	import { getImage } from "@/utils/commons"
+
+	import HeartIcon from "~/icons/HeartIcon.vue"
+	import ProductPrice from "~/ProductPrice.vue"
 
 	const props = defineProps({
 		id: {
@@ -44,13 +45,6 @@
 		},
 	})
 
-	const discountedPrice = computed(() => {
-		if (props.discount) {
-			return (props.price - (props.price * props.discount) / 100).toFixed(2)
-		}
-		return props.price
-	})
-
 	const imageComplete = ref(false)
 
 	const colors = computed(() => `${props.colorsLength} color${props.colorsLength > 1 ? "i" : "e"}`)
@@ -79,16 +73,7 @@
 			<span class="product-card__colors">{{ colors }}</span>
 		</div>
 
-		<div class="product-card__price">
-			<p class="product-card__price-current">
-				<template v-if="discount">{{ discountedPrice }}{{ currency }}</template>
-				<template v-else>{{ price }}{{ currency }}</template>
-			</p>
-			<div class="product-card__price-discount" v-if="discount">
-				<span class="product-card__price-origin">{{ price }}{{ currency }}</span>
-				<span class="product-card__price-discount-badge">{{ discount }}%</span>
-			</div>
-		</div>
+		<ProductPrice :price="price" :discount="discount" />
 	</button>
 </template>
 
@@ -154,8 +139,7 @@
 			padding: 0.25rem 0.62rem;
 			background-color: white;
 		}
-		&__info,
-		&__price {
+		&__info {
 			padding: 0 0.62rem;
 		}
 		&__title {
@@ -167,30 +151,6 @@
 		}
 		&__colors {
 			color: var(--colors-color);
-		}
-		&__price-current {
-			font-size: 1.25rem;
-			color: var(--primary);
-		}
-		&__price-origin {
-			text-decoration: line-through;
-		}
-		&__price-discount {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			gap: 0.25rem;
-			margin-top: 0.31rem;
-			font-size: 1rem;
-		}
-		&__price-discount-badge {
-			padding: 0.3rem 0.69rem;
-			border-radius: 0.3125rem;
-			background: var(--secondary);
-			font-size: 0.875rem;
-			font-weight: 800;
-			text-align: center;
-			color: white;
 		}
 	}
 </style>

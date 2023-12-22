@@ -9,12 +9,14 @@
   --veryLightGrey: #ededed;
   --white: #fff;
   --blue: #007aff;
+  --orange: #ff9500;
 
   --primary: var(--red);
   --primaryLight: var(--redLight);
   --secondary: var(--green);
   --tertiary: var(--grey);
   --tertiaryLight: var(--veryLightGrey);
+  --warning: var(--orange);
 
   --boxShadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
 }
@@ -34,6 +36,7 @@ body {
 
 #app {
   max-width: 1440px;
+  min-width: 390px;
   margin: 0 auto;
 }
 
@@ -63,6 +66,18 @@ body {
   &:hover {
     color: var(--primary);
   }
+}
+
+.btn--black {
+  color: white;
+  background: black;
+  padding: 0.5rem 1.2rem;
+
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background: var(--primary);
+  }
+
 }
 
 .list-none {

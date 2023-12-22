@@ -88,6 +88,7 @@
 		flex-direction: column;
 		gap: 1.25rem;
 		width: 100%;
+		min-width: 15.625rem;
 		padding-bottom: 1.25rem;
 		box-shadow: var(--boxShadow);
 		text-align: center;
@@ -150,6 +151,7 @@
 			font-size: 0.875rem;
 		}
 		&__colors {
+			text-align: center;
 			color: var(--colors-color);
 		}
 	}

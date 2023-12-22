@@ -92,7 +92,7 @@
 	.main {
 		padding: 0 6.5rem;
 
-		@media (max-width: 100px) {
+		@media (max-width: 900px) {
 			padding: 0 2.5rem;
 		}
 

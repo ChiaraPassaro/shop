@@ -1,4 +1,6 @@
 <script setup lang="ts">
+	defineEmits<{ change: [value: boolean] }>()
+
 	defineProps({
 		label: {
 			type: String,
@@ -8,13 +10,30 @@
 			type: String,
 			required: true,
 		},
+		name: {
+			type: String,
+			required: true,
+		},
+		checked: {
+			type: Boolean,
+		},
+		labelHidden: {
+			type: Boolean,
+		},
 	})
 </script>
 <template>
 	<div class="checkbox">
-		<label :for="`checkbox-${id}`">{{ label }}</label>
+		<label :for="`checkbox-${id}`" :class="{ 'sr-only': labelHidden }">{{ label }}</label>
 		<div class="checkbox__wrapper">
-			<input class="checkbox__input" type="checkbox" id="`checkbox-${id}`" />
+			<input
+				class="checkbox__input"
+				type="checkbox"
+				id="`checkbox-${id}`"
+				:name="name"
+				:checked="checked"
+				@change="$emit('change', ($event?.target as HTMLInputElement)?.checked)"
+			/>
 
 			<div class="checkbox__icon">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
@@ -41,6 +60,7 @@
 			align-items: center;
 			width: 1.5rem;
 			height: 1.5rem;
+			background-color: white;
 			border-radius: 0.25rem;
 			border: 1px solid var(--lightGrey);
 		}

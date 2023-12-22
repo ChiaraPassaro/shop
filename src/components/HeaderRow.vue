@@ -7,10 +7,11 @@
 	import HeartIcon from "~/icons/HeartIcon.vue"
 	import CartIcon from "~/icons/CartIcon.vue"
 	import MenuIcon from "~/icons/MenuIcon.vue"
-	import SearchIcon from "~/icons/SearchIcon.vue"
+	import { onMounted, ref } from "vue"
+	import { storeToRefs } from "pinia"
 
 	import { useLanguage } from "@/stores/useLanguage"
-	import { storeToRefs } from "pinia"
+	import SearchIcon from "~/icons/SearchIcon.vue"
 
 	const topMenuItems = [
 		{ path: "", name: "Chi siamo" },
@@ -25,7 +26,16 @@
 		{ path: "", name: "Tutti gli articoli" },
 	]
 
+	const isMenuActive = ref(false)
 	const { selectedLang, languages } = storeToRefs(useLanguage())
+
+	onMounted(() => {
+		window.addEventListener("resize", () => {
+			if (window.innerWidth > 960) {
+				isMenuActive.value = false
+			}
+		})
+	})
 </script>
 
 <template>
@@ -49,7 +59,7 @@
 		</nav>
 
 		<div class="header__main">
-			<button class="header__main-menu-btn btn btn--primary-borderless">
+			<button class="header__main-menu-btn btn btn--primary-borderless" @click="isMenuActive = !isMenuActive">
 				<MenuIcon />
 				<span>Menu</span>
 			</button>
@@ -85,7 +95,7 @@
 		</div>
 
 		<nav class="header__main-nav">
-			<ul class="header__main-menu list-inline">
+			<ul class="header__main-menu list-inline" :class="{ 'header__main-menu--active': isMenuActive }">
 				<li v-for="{ path, name } in mainMenuItems" :key="name" class="list-inline-item">
 					<RouterLink v-if="path" class="router-link" :to="path">{{ name }}</RouterLink>
 					<!-- to show fake links -->
@@ -131,6 +141,7 @@
 					grid-template-rows: auto;
 
 					gap: 1.3125rem;
+					padding: 0.65rem;
 				}
 			}
 
@@ -201,6 +212,15 @@
 
 				& {
 					display: none;
+					&--active {
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						align-items: stretch;
+						font-size: 0.8125rem;
+						text-transform: uppercase;
+						padding: 0 1.25rem;
+					}
 				}
 			}
 

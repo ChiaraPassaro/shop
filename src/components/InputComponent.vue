@@ -31,22 +31,36 @@
 			type="text"
 			@input="$emit('update:modelValue', $event)"
 		/>
+		<slot />
 	</div>
 </template>
 
 <style scoped lang="scss">
 	.input {
 		display: flex;
-		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		border: 1px solid var(--lightGrey);
+		border-radius: 0.3125rem;
+		padding: 0.5rem;
+		font-size: 1rem;
+		&:focus {
+			outline: none;
+			border-color: var(--primary);
+		}
 		&__input {
-			border: 1px solid var(--lightGrey);
-			border-radius: 0.3125rem;
-			padding: 0.5rem;
-			font-size: 1rem;
+			all: unset;
+			display: flex;
+			align-items: center;
+
 			&:focus {
 				outline: none;
-				border-color: var(--primary);
 			}
+		}
+		@media (max-width: 768px) {
+			flex-direction: row-reverse;
+			justify-content: flex-end;
 		}
 	}
 </style>

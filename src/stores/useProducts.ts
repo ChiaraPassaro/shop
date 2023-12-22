@@ -5,8 +5,7 @@ import type { Option } from "@/types/ComboBox"
 
 import axios from "@/utils/axios"
 import { useLoader } from "@/stores/useLoader"
-
-const getSevenDaysAgo = () => new Date(new Date().setDate(new Date().getDate() - 7))
+import { getRandom, getSevenDaysAgo } from "@/utils/commons"
 
 const availableCategories = ["Clothes", "Shoes"]
 
@@ -117,10 +116,9 @@ export const useProducts = defineStore("products", {
 			completeData = completeData.map((product: Product) => {
 				return {
 					...product,
-					discount: Math.floor(Math.random() * 48),
-					colorsLength: Math.floor(Math.random() * 5 + 1),
+					discount: getRandom(0, 48),
+					colorsLength: getRandom(1, 5),
 					isNew: new Date(product.creationAt) > getSevenDaysAgo(),
-					// images: product.images.map(() => "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"),
 				}
 			})
 
@@ -144,13 +142,16 @@ export const useProducts = defineStore("products", {
 
 			//mock data
 			data.brand = "Brand"
-			data.discount = Math.floor(Math.random() * 48)
-			data.colorsLength = Math.floor(Math.random() * 5 + 1)
+			data.code = "123.123.123"
+			data.discount = getRandom(0, 48)
+			data.colorsLength = getRandom(1, 5)
 			data.isNew = new Date(data.creationAt) > getSevenDaysAgo()
-			data.guarantee = Math.floor(Math.random() * 12 + 1)
+			data.guarantee = getRandom(1, 5)
 			data.strengths = ["Lorem ipsum dolor sit amet.", "Quisquam, voluptatum.", "Amet consectetur adipisicing elit. "]
 			data.images.length < 2 && (data.images = [data.images[0], data.images[0], data.images[0]])
-
+			if (data.category.name === "Clothes") {
+				data.sizes = ["S", "M", "L", "XL"]
+			}
 			return data
 		},
 		async getPage(value: number) {

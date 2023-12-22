@@ -7,6 +7,7 @@
 
 	import BreadCrumbs from "~/BreadCrumbs.vue"
 	import OtherProducts from "~/OtherProducts.vue"
+	import ProductPrice from "~/ProductPrice.vue"
 
 	const props = defineProps({
 		id: {
@@ -76,17 +77,24 @@
 				<div class="product__info">
 					<div class="product__code">{{ product.code }}</div>
 					<div class="product__guaranteed">Garanzia: {{ product.guarantee }}</div>
-					<div class="product__price">{{ product.price }}</div>
+					<ProductPrice :price="product.price" :discount="product.discount" singleRow />
 					<div class="product__availability">{{ product.available }}</div>
 				</div>
 
 				<div class="product__actions"></div>
 
-				<ul v-if="product.strengths?.length" class="product__strengths">
-					<li v-for="(strength, idx) in product.strengths" :key="`strength-${idx}`" class="product__strengths-item">
-						{{ strength }}
-					</li>
-				</ul>
+				<div class="product__strengths">
+					<h3 class="product__strengths-title">Punti di forza</h3>
+					<ul v-if="product.strengths?.length" class="product__strengths-list">
+						<li
+							v-for="(strength, idx) in product.strengths"
+							:key="`strength-${idx}`"
+							class="product__strengths-list-item"
+						>
+							{{ strength }}
+						</li>
+					</ul>
+				</div>
 			</div>
 		</header>
 
@@ -94,6 +102,7 @@
 			{{ product.description }}
 		</div>
 	</main>
+
 	<OtherProducts
 		v-if="otherProducts.length"
 		:pages="pages"
@@ -113,6 +122,40 @@
 			gap: 1.56rem;
 			padding: 0 6.5rem;
 		}
+		&__strengths {
+			&-title {
+				font-size: 0.875rem;
+				text-transform: uppercase;
+			}
+			&-list {
+				display: flex;
+				padding: 1.56rem 1.56rem 0;
+				flex-direction: column;
+				align-items: center;
+				gap: 1.56rem;
+				background-color: var(--veryLightGrey);
+				list-style: none;
+
+				&-item {
+					display: flex;
+					align-items: center;
+					padding-bottom: 1.56rem;
+					&:not(:last-child) {
+						border-bottom: 1px solid var(--lightGrey);
+					}
+					&::before {
+						content: url("~/icons/WarrantyIcon.svg");
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						width: 0.8rem;
+						height: 0.8rem;
+						margin-right: 1.56rem;
+					}
+				}
+			}
+		}
+
 		&__header-images {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
@@ -151,48 +194,11 @@
 		&__description {
 			padding: 0 6.5rem;
 		}
-		&__other {
-			display: flex;
-			flex-direction: column;
-			gap: 3.75rem;
-			position: relative;
-			padding: 0 4.2rem;
-			margin: 3.75rem 0;
-			&-title {
-				color: #000;
-				font-size: 1.9rem;
-				font-weight: 800;
-			}
-			&-slider {
-				display: flex;
-				justify-content: space-between;
-				justify-content: center;
-				gap: 1.56rem;
-			}
-			&-list {
-				flex-grow: 1;
-				display: flex;
-				justify-content: center;
-				gap: 1.56rem;
-				.product-card {
-					width: calc(100% / 4);
-				}
-			}
-			&-slider-stepper {
-				display: flex;
-				justify-content: center;
-				gap: 1.56rem;
-				&-item {
-					width: 0.8rem;
-					height: 0.8rem;
-					border-radius: 50%;
-					list-style: none;
-					background-color: var(--lightGrey);
-					&--active {
-						background-color: var(--primary);
-					}
-				}
-			}
+		&__guaranteed {
+			margin-bottom: 1.25rem;
+		}
+		&__availability {
+			margin-top: 1.25rem;
 		}
 	}
 </style>

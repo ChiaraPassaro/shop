@@ -65,7 +65,7 @@
 			padding: 0.3rem 0.69rem;
 			border-radius: 0.3125rem;
 			background: var(--secondary);
-			font-size: 0.875rem;
+			font-size: var(--text-sm);
 			font-weight: 800;
 			text-align: center;
 			color: white;

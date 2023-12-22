@@ -67,7 +67,7 @@
 		&__title,
 		&__menu button {
 			padding-bottom: 0.3rem;
-			font-size: 0.875rem;
+			font-size: var(--text-sm);
 			text-transform: uppercase;
 			text-wrap: nowrap;
 		}

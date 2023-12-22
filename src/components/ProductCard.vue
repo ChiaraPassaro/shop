@@ -82,6 +82,9 @@
 		--heartBgHover: var(--veryLightGrey);
 		--heartFillHover: #9f2c2c;
 		--colors-color: var(--darkGrey);
+		--space: 0.31rem;
+		--padding-block: 0.62rem;
+		--max-hight-img: 13.75rem;
 
 		all: unset;
 		display: flex;
@@ -99,8 +102,8 @@
 		}
 		&__add-to-preferred {
 			position: absolute;
-			top: 0.31rem;
-			right: 0.31rem;
+			top: var(--space);
+			right: var(--space);
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -116,18 +119,16 @@
 			}
 		}
 		&__image {
-			img {
+			img,
+			&--skeleton {
 				display: block;
 				width: 100%;
-				max-height: 13.75rem;
+				max-height: var(--max-hight-img);
 				aspect-ratio: 1.5/ 1;
 				object-fit: cover;
 			}
 			&--skeleton {
 				background-color: var(--lightGrey);
-				width: 100%;
-				max-height: 13.75rem;
-				aspect-ratio: 1.5/ 1;
 				img {
 					display: none;
 				}
@@ -135,20 +136,20 @@
 		}
 		&__badge {
 			position: absolute;
-			bottom: 0.31rem;
-			left: 0.31rem;
-			padding: 0.25rem 0.62rem;
+			bottom: var(--space);
+			left: var(--space);
+			padding: 0.25rem var(--padding-block);
 			background-color: white;
 		}
 		&__info {
-			padding: 0 0.62rem;
+			padding: 0 var(--padding-block);
 		}
 		&__title {
-			margin: 0.31rem 0;
-			font-size: 1.125rem;
+			margin: var(--space) 0;
+			font-size: var(--text-title);
 		}
 		&__brand {
-			font-size: 0.875rem;
+			font-size: var(--text-sm);
 		}
 		&__colors {
 			text-align: center;

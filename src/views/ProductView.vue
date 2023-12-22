@@ -186,7 +186,7 @@
 		}
 		&__strengths {
 			&-title {
-				font-size: 0.875rem;
+				font-size: var(--text-sm);
 				text-transform: uppercase;
 			}
 			&-list {
@@ -286,7 +286,7 @@
 			gap: 0.75rem;
 			p {
 				display: block;
-				font-size: 0.875rem;
+				font-size: var(--text-sm);
 			}
 		}
 		&__title {
@@ -294,7 +294,7 @@
 			line-height: 100%;
 		}
 		&__brand {
-			font-size: 1.125rem;
+			font-size: var(--text-title);
 			line-height: 1.5rem;
 		}
 		&__info {

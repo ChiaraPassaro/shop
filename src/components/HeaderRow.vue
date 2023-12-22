@@ -1,12 +1,14 @@
 <script setup lang="ts">
 	import { ref } from "vue"
 	import { RouterLink } from "vue-router"
+
 	import ComboBox from "~/ComboBox.vue"
 	import InputComponent from "~/InputComponent.vue"
 	import AccountIcon from "~/icons/AccountIcon.vue"
 	import HeartIcon from "~/icons/HeartIcon.vue"
 	import CartIcon from "~/icons/CartIcon.vue"
 	import MenuIcon from "~/icons/MenuIcon.vue"
+	import SearchIcon from "~/icons/SearchIcon.vue"
 
 	const topMenuItems = [
 		{ path: "", name: "Chi siamo" },
@@ -60,7 +62,9 @@
 				label="search"
 				placeholder="Cerca un prodotto"
 				labelHidden
-			/>
+			>
+				<SearchIcon />
+			</InputComponent>
 
 			<ul class="header__main-actions list-inline">
 				<li class="list-inline__item">

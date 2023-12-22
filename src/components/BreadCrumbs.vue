@@ -24,3 +24,15 @@
 		</span>
 	</div>
 </template>
+
+<style scoped lang="scss">
+	a {
+		color: black;
+		text-decoration: none;
+		&:hover,
+		&:active,
+		&:focus {
+			color: var(--primary);
+		}
+	}
+</style>

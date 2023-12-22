@@ -31,6 +31,7 @@ export type Product = {
 	guarantee?: number
 	available?: boolean
 	strengths?: string[]
+	sizes?: string[]
 }
 
 export type Filter = "price_min" | "price_max" | "only_available"

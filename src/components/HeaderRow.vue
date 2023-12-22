@@ -1,5 +1,4 @@
 <script setup lang="ts">
-	import { ref } from "vue"
 	import { RouterLink } from "vue-router"
 
 	import ComboBox from "~/ComboBox.vue"
@@ -9,6 +8,8 @@
 	import CartIcon from "~/icons/CartIcon.vue"
 	import MenuIcon from "~/icons/MenuIcon.vue"
 	import SearchIcon from "~/icons/SearchIcon.vue"
+	import { useLanguage } from "@/stores/useLanguage"
+	import { storeToRefs } from "pinia"
 
 	const topMenuItems = [
 		{ path: "", name: "Chi siamo" },
@@ -23,7 +24,7 @@
 		{ path: "", name: "Tutti gli articoli" },
 	]
 
-	const selectedLang = ref({ label: "Ita", value: "it-IT" })
+	const { selectedLang, languages } = storeToRefs(useLanguage())
 </script>
 
 <template>
@@ -40,7 +41,7 @@
 				id="language"
 				class="header__top-language"
 				:modelValue="selectedLang"
-				:options="[{ label: 'Ita', value: 'it-IT' }]"
+				:options="languages"
 				label="language"
 				borderless
 			/>

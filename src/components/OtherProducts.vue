@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import type { Product } from "@/types/Product"
-	import type { PropType } from "vue"
+	import { onMounted, ref, type PropType } from "vue"
 	import { useRouter } from "vue-router"
 
 	import ProductCard from "~/ProductCard.vue"
@@ -12,14 +12,6 @@
 
 	defineProps({
 		pages: {
-			type: Number,
-			required: true,
-		},
-		limit: {
-			type: Number,
-			required: true,
-		},
-		offset: {
 			type: Number,
 			required: true,
 		},
@@ -69,15 +61,16 @@
 			</button>
 		</div>
 		<ul class="product__other-slider-stepper">
-			<li
-				v-for="i in 3"
-				:key="`stepper-${i}`"
-				class="product__other-slider-stepper-item"
-				:class="{
-					'product__other-slider-stepper-item--active': i === currentPage,
-				}"
-			>
-				<span class="sr-only">Page {{ i }}</span>
+			<li v-for="i in pages" :key="`stepper-${i}`" class="product__other-slider-stepper-item">
+				<button
+					class="btn btn--primary-borderless product__other-slider-stepper-item-btn"
+					:class="{
+						'product__other-slider-stepper-item-btn--active': i === currentPage,
+					}"
+					@click="changePage(i, 0)"
+				>
+					<span class="sr-only">Page {{ i }}</span>
+				</button>
 			</li>
 		</ul>
 	</section>
@@ -87,11 +80,12 @@
 	.product__other {
 		display: flex;
 		flex-direction: column;
-		gap: 3.75rem;
+		gap: 1.75rem;
 		position: relative;
 		padding: 0 4.2rem;
 		margin: 3.75rem 0;
 		&-title {
+			padding: 0 2.1rem;
 			color: #000;
 			font-size: 1.9rem;
 			font-weight: 800;
@@ -105,7 +99,6 @@
 		&-list {
 			flex-grow: 1;
 			display: flex;
-			justify-content: center;
 			gap: 1.56rem;
 			.product-card {
 				width: calc(100% / 4);
@@ -116,14 +109,54 @@
 			justify-content: center;
 			gap: 1.56rem;
 			&-item {
+				display: flex;
+				justify-content: center;
+				align-items: center;
 				width: 0.8rem;
 				height: 0.8rem;
-				border-radius: 50%;
+
 				list-style: none;
-				background-color: var(--lightGrey);
-				&--active {
-					background-color: var(--primary);
+				padding: 0;
+
+				&-btn {
+					width: 100%;
+					height: 100%;
+					border-radius: 50%;
+					background-color: var(--lightGrey);
+
+					&:hover {
+						background-color: var(--primary);
+					}
+					&--active {
+						background-color: var(--primary);
+					}
 				}
+			}
+		}
+
+		@media (max-width: 650px) {
+			width: 100%;
+			padding: 0 0 0 1.25rem;
+
+			&-slider {
+				width: 100%;
+				overflow-x: hidden;
+			}
+
+			&-list {
+				justify-content: flex-start;
+				width: 300%;
+				padding-bottom: 0.6rem;
+				overflow-x: auto;
+				scrollbar-width: none;
+				&::-webkit-scrollbar {
+					display: none;
+				}
+			}
+
+			&-prev,
+			&-next {
+				display: none;
 			}
 		}
 	}

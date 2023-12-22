@@ -89,6 +89,9 @@
 			color: #000;
 			font-size: 1.9rem;
 			font-weight: 800;
+			@media (max-width: 1100px) {
+				padding: 0;
+			}
 		}
 		&-slider {
 			display: flex;
@@ -134,7 +137,7 @@
 			}
 		}
 
-		@media (max-width: 650px) {
+		@media (max-width: 1100px) {
 			width: 100%;
 			padding: 0 0 0 1.25rem;
 
@@ -149,8 +152,13 @@
 				padding-bottom: 0.6rem;
 				overflow-x: auto;
 				scrollbar-width: none;
+				scroll-snap-type: x mandatory;
+
 				&::-webkit-scrollbar {
 					display: none;
+				}
+				.product-card {
+					scroll-snap-align: start;
 				}
 			}
 

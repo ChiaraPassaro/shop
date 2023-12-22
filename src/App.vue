@@ -9,5 +9,3 @@
 	<RouterView />
 	<FooterRow />
 </template>
-
-<style scoped></style>

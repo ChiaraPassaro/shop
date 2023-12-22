@@ -8,6 +8,7 @@
 	import CartIcon from "~/icons/CartIcon.vue"
 	import MenuIcon from "~/icons/MenuIcon.vue"
 	import SearchIcon from "~/icons/SearchIcon.vue"
+
 	import { useLanguage } from "@/stores/useLanguage"
 	import { storeToRefs } from "pinia"
 

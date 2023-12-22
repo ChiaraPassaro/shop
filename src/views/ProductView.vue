@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	import { computed, onMounted, ref, watch } from "vue"
 	import type { ImageMapped, Product } from "@/types/Product"
+	import type { Option } from "@/types/ComboBox"
 
 	import { useProducts } from "@/stores/useProducts"
 	import { getImage } from "@/utils/commons"
@@ -8,6 +9,8 @@
 	import BreadCrumbs from "~/BreadCrumbs.vue"
 	import OtherProducts from "~/OtherProducts.vue"
 	import ProductPrice from "~/ProductPrice.vue"
+	import PackIcon from "~/icons/PackIcon.vue"
+	import ComboBox from "~/ComboBox.vue"
 
 	const props = defineProps({
 		id: {
@@ -18,10 +21,18 @@
 
 	const { getProductById, getOtherProducts } = useProducts()
 	const product = ref<Product>()
+	const sizesOptions = computed(() => {
+		if (!product.value?.sizes) return
+		return product.value.sizes.map((size) => ({
+			value: size,
+			label: size,
+		}))
+	})
 
 	const imagesMapped = ref<ImageMapped[]>()
 
 	const otherProducts = ref<Product[]>([])
+	const selectedSize = ref<Option>({})
 
 	const pages = 3
 	const limitSlider = 4
@@ -47,6 +58,11 @@
 		},
 		{ immediate: true, deep: true },
 	)
+
+	const warranty = computed(() => {
+		if (!product.value) return
+		return `${product.value?.guarantee} mes${product?.value?.guarantee && product?.value?.guarantee > 1 ? "i" : "e"}`
+	})
 
 	onMounted(async () => {
 		product.value = await getProductById(props.id)
@@ -74,14 +90,51 @@
 				<small class="product__brand">{{ product.brand }}</small>
 				<h2 class="product__title">{{ product.title }}</h2>
 
-				<div class="product__info">
-					<div class="product__code">{{ product.code }}</div>
-					<div class="product__guaranteed">Garanzia: {{ product.guarantee }}</div>
-					<ProductPrice :price="product.price" :discount="product.discount" singleRow />
-					<div class="product__availability">{{ product.available }}</div>
-				</div>
-
-				<div class="product__actions"></div>
+				<dl class="product__info">
+					<div>
+						<dd class="product__code">Codice:</dd>
+						<dt class="product__code-value">{{ product.code }}</dt>
+					</div>
+					<div>
+						<dd class="product__guaranteed">Garanzia:</dd>
+						<dt class="product__guaranteed-value">{{ warranty }}</dt>
+					</div>
+					<div>
+						<dd class="product__price sr-only">Prezzo:</dd>
+						<dt class="product__price-value">
+							<ProductPrice :price="product.price" :discount="product.discount" singleRow />
+						</dt>
+					</div>
+					<div>
+						<dd class="product__availability sr-only">Disponibilità:</dd>
+						<dt
+							class="product__availability-value"
+							:class="{
+								'product__availability-value--available': product.available,
+								'product__availability-value--not-available': !product.available,
+							}"
+						>
+							<PackIcon /><span>{{ product.available ? "Disponibile" : "Non disponibile" }}</span>
+						</dt>
+					</div>
+					<div class="product__actions">
+						<div v-if="sizesOptions?.length">
+							<dd class="product__sizes">Misura:</dd>
+							<dt class="product__sizes-value">
+								<ComboBox
+									label="misura"
+									id="sizes"
+									:options="sizesOptions"
+									v-model="selectedSize"
+									:resetValue="sizesOptions[0]"
+								/>
+							</dt>
+						</div>
+						<div class="product__add-to-cart">
+							<button class="btn btn--black">Aggiungi al Carrello</button>
+						</div>
+					</div>
+				</dl>
 
 				<div class="product__strengths">
 					<h3 class="product__strengths-title">Punti di forza</h3>
@@ -99,7 +152,8 @@
 		</header>
 
 		<div class="product__description">
-			{{ product.description }}
+			<h2 class="product__description-title">Descrizione</h2>
+			<div>{{ product.description }}</div>
 		</div>
 	</main>
 
@@ -116,6 +170,9 @@
 
 <style lang="scss">
 	.product {
+		display: flex;
+		flex-direction: column;
+		gap: 1.56rem;
 		&__header {
 			display: grid;
 			grid-template-columns: 1.5fr 1fr;
@@ -130,8 +187,9 @@
 			&-list {
 				display: flex;
 				padding: 1.56rem 1.56rem 0;
+				margin-top: 0.4rem;
 				flex-direction: column;
-				align-items: center;
+				align-items: stretch;
 				gap: 1.56rem;
 				background-color: var(--veryLightGrey);
 				list-style: none;
@@ -150,12 +208,11 @@
 						justify-content: center;
 						width: 0.8rem;
 						height: 0.8rem;
-						margin-right: 1.56rem;
+						margin-right: 1.88rem;
 					}
 				}
 			}
 		}
-
 		&__header-images {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
@@ -191,14 +248,69 @@
 				}
 			}
 		}
+		&__header-info {
+			display: flex;
+			flex-direction: column;
+			gap: 0.75rem;
+			p {
+				display: block;
+				font-size: 0.875rem;
+			}
+		}
+		&__title {
+			font-size: 2.375rem;
+			line-height: 100%;
+		}
+		&__brand {
+			font-size: 1.125rem;
+			line-height: 1.5rem;
+		}
+		&__info {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			gap: 0.75rem;
+			div,
+			div > * {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+		}
+		&__availability-value {
+			display: flex;
+			gap: 1.25rem;
+			width: 100%;
+			padding: 0.69rem 0;
+			border-top: 1px solid var(--veryLightGrey);
+			border-bottom: 1px solid var(--veryLightGrey);
+			color: var(--warning);
+			&--available {
+				color: var(--secondary);
+			}
+		}
+		&__price-value {
+			width: 100%;
+		}
+
+		&__actions {
+			display: flex;
+			justify-content: flex-end;
+			height: 3rem;
+			margin-bottom: 1.25rem;
+			.product__add-to-cart {
+				flex-grow: 1;
+				display: flex;
+				justify-content: flex-end;
+			}
+		}
 		&__description {
 			padding: 0 6.5rem;
-		}
-		&__guaranteed {
-			margin-bottom: 1.25rem;
-		}
-		&__availability {
-			margin-top: 1.25rem;
+			&-title {
+				margin-bottom: 2.5rem;
+				font-size: 2.25rem;
+				line-height: 100%;
+			}
 		}
 	}
 </style>

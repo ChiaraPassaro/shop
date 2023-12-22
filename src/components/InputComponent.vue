@@ -45,6 +45,7 @@
 		border-radius: 0.3125rem;
 		padding: 0.5rem;
 		font-size: 1rem;
+		background-color: white;
 		&:focus {
 			outline: none;
 			border-color: var(--primary);
